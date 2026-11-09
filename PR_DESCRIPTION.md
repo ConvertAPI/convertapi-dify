@@ -22,7 +22,7 @@ This is the official ConvertAPI plugin, built and maintained by us at ConvertAPI
 - **PDF to Word** and **PDF to Excel**
 - **Merge PDF**, **Compress PDF** and **OCR PDF** (searchable PDF or plain text, 27 languages)
 
-Authorization is a ConvertAPI API token, with an optional processing region (EU, UK, US, Canada, Asia, Australia). Errors such as a wrong token, no conversions left, an unsupported format pair or an invalid page range come back as a short readable message plus a JSON message with `status: "error"`.
+Authorization is a ConvertAPI API token, with an optional processing region (EU, UK, US, Canada, Asia, Australia). Errors such as a wrong token, no conversions left, an unsupported format pair or an invalid page range raise a short readable message, so the workflow node fails and Dify's error handling applies.
 
 ## Risk level
 

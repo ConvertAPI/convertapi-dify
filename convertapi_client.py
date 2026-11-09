@@ -107,7 +107,11 @@ def read_dify_file(value: Any, label: str = "input_file") -> InputFile:
     try:
         content = value.blob
     except Exception as exc:  # the SDK downloads the file from Dify storage here
-        raise ConvertApiError(f"Could not read '{filename}' from Dify file storage: {exc}") from exc
+        raise ConvertApiError(
+            f"Could not read '{filename}' from Dify file storage ({exc.__class__.__name__}). On self-hosted Dify,"
+            " the plugin daemon must reach the Dify API: set INTERNAL_FILES_URL (for Docker Compose,"
+            " INTERNAL_FILES_URL=http://api:5001) and restart Dify."
+        ) from None
     if not content:
         raise ConvertApiError(f"'{filename}' is empty.")
 
@@ -295,6 +299,9 @@ class ConvertApiClient:
             hint = "The file is too large for ConvertAPI."
         elif status == 429:
             hint = "Too many requests at once. Wait a moment and try again."
+        elif status >= 500 and message.lower().startswith("conversion failed"):
+            # ConvertAPI answers 500 with code 5001 when the file or a parameter cannot be converted.
+            hint = "Check the file and the parameters, such as the page range."
         elif status >= 500:
             hint = "ConvertAPI had a server error. Try again in a minute."
         else:

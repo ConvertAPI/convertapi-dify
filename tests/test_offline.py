@@ -97,6 +97,7 @@ def test_request_shape_merge_and_region():
         (400, {"Code": 4000, "Message": "Parameter validation error.",
                "InvalidParameters": {"PageRange": ["Bad range"]}}, "PageRange: Bad range"),
         (503, None, "server error"),
+        (500, {"Code": 5001, "Message": "Conversion failed. Invalid pages range."}, "Check the file and the parameters"),
     ],
 )
 def test_error_messages(status, body, expected):

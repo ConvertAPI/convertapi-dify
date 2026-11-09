@@ -18,6 +18,8 @@ from dify_plugin.errors.tool import ToolProviderCredentialValidationError
 from dify_plugin.file.entities import FileType
 from dify_plugin.file.file import File
 
+from convertapi_client import ConvertApiError
+
 OUT = Path(__file__).resolve().parent.parent / "test-output"
 OUT.mkdir(exist_ok=True)
 DEMO_DOCX = "https://cdn.convertapi.com/public/files/demo.docx"
@@ -47,7 +49,14 @@ def run(registration, token, tool: str, params: dict, region: str = "global"):
         session=None,
     )
     texts, jsons, blobs = [], [], []
-    for msg in instance._invoke(params):
+    try:
+        messages = list(instance._invoke(params))
+    except ConvertApiError as exc:  # raised so Dify marks the node as failed
+        message = str(exc)
+        assert token not in message and exc.__cause__ is None and exc.__suppress_context__
+        assert message.startswith(f"ConvertAPI {tool} failed: ")
+        return message, {"status": "error"}, []
+    for msg in messages:
         if msg.type == ToolInvokeMessage.MessageType.TEXT:
             texts.append(msg.message.text)
         elif msg.type == ToolInvokeMessage.MessageType.JSON:
@@ -186,6 +195,9 @@ def test_unsupported_pair_and_bad_parameter(registration, token, demo_pdf):
     text, summary, _ = run(registration, token, "pdf_to_word", {
         "input_file": dify_file("demo.pdf", demo_pdf), "page_range": "abc"})
     assert summary["status"] == "error", text
+    text, summary, _ = run(registration, token, "pdf_to_word", {
+        "input_file": dify_file("demo.pdf", demo_pdf), "page_range": "50-60"})
+    assert summary["status"] == "error" and "Invalid pages range" in text and "Try again" not in text, text
     text, summary, _ = run(registration, token, "convert_file", {
         "input_file": dify_file("demo.pdf", demo_pdf), "output_format": "docx", "extra_parameters": "{oops"})
     assert summary["status"] == "error" and "JSON object" in text

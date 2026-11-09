@@ -11,4 +11,4 @@ class ConvertApiProvider(ToolProvider):
         try:
             ConvertApiClient(credentials).validate_credentials()
         except ConvertApiError as exc:
-            raise ToolProviderCredentialValidationError(str(exc)) from exc
+            raise ToolProviderCredentialValidationError(str(exc)) from None

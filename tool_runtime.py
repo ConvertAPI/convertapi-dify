@@ -37,9 +37,9 @@ def build_fields(tool_parameters: dict[str, Any], mapping: dict[str, str]) -> di
     return fields
 
 
-def emit_error(tool: Any, action: str, message: str) -> Generator[ToolInvokeMessage, None, None]:
-    yield tool.create_text_message(f"ConvertAPI {action} failed: {message}")
-    yield tool.create_json_message({"status": "error", "action": action, "error": message})
+def fail(action: str, message: str) -> ConvertApiError:
+    """The error to raise, so Dify marks the tool node as failed (and an agent sees the message)."""
+    return ConvertApiError(f"ConvertAPI {action} failed: {message}")
 
 
 def emit_result(
@@ -121,6 +121,6 @@ def run_conversion(
         result = client.convert(source, target_format, inputs, fields)
         yield from emit_result(tool, action, inputs, source, result.files[0].extension, result)
     except ConvertApiError as exc:
-        yield from emit_error(tool, action, str(exc))
-    except Exception as exc:  # never leak a stack trace or credentials to the user
-        yield from emit_error(tool, action, f"Unexpected error ({exc.__class__.__name__}).")
+        raise fail(action, str(exc)) from None
+    except Exception as exc:  # never leak details or credentials to the user
+        raise fail(action, f"Unexpected error ({exc.__class__.__name__}).") from None
