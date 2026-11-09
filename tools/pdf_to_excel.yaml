@@ -1,0 +1,59 @@
+identity:
+  name: pdf_to_excel
+  author: convertapi
+  label:
+    en_US: PDF to Excel
+description:
+  human:
+    en_US: Extract tables from a PDF into an Excel workbook (XLSX).
+  llm: Convert a PDF file to an Excel XLSX workbook, extracting its tables.
+parameters:
+  - name: input_file
+    type: file
+    required: true
+    form: llm
+    label:
+      en_US: PDF file
+    human_description:
+      en_US: The PDF to convert.
+    llm_description: The PDF file to convert to Excel.
+  - name: page_range
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Page range
+    human_description:
+      en_US: Pages to convert, for example 1-10 or 1,2,5. Leave empty for all pages.
+    llm_description: Pages to convert, for example 1-10 or 1,2,5. Leave empty for all pages.
+  - name: single_sheet
+    type: boolean
+    required: false
+    default: false
+    form: form
+    label:
+      en_US: Single sheet
+    human_description:
+      en_US: Put all tables on one worksheet instead of one sheet per page.
+    llm_description: Set true to put all tables on one worksheet.
+  - name: password
+    type: secret-input
+    required: false
+    form: form
+    label:
+      en_US: Open password
+    human_description:
+      en_US: Password of a protected input document.
+    llm_description: Password to open a protected input document.
+  - name: extra_parameters
+    type: string
+    required: false
+    form: form
+    label:
+      en_US: Extra parameters (JSON)
+    human_description:
+      en_US: 'Optional ConvertAPI parameters as a JSON object, for example {"PageRange": "1-3"}. See the converter page on convertapi.com for the full list.'
+    llm_description: Optional JSON object of extra ConvertAPI conversion parameters.
+extra:
+  python:
+    source: tools/pdf_to_excel.py

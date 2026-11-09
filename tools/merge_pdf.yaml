@@ -1,0 +1,51 @@
+identity:
+  name: merge_pdf
+  author: convertapi
+  label:
+    en_US: Merge PDF
+description:
+  human:
+    en_US: Combine several PDF files into one PDF, in the given order.
+  llm: Merge two or more PDF files into a single PDF, keeping the order of the list.
+parameters:
+  - name: input_files
+    type: files
+    required: true
+    form: llm
+    label:
+      en_US: PDF files
+    human_description:
+      en_US: Two or more PDFs, merged in this order.
+    llm_description: Two or more PDF files to merge, in order.
+  - name: bookmarks
+    type: select
+    required: false
+    default: disabled
+    form: form
+    label:
+      en_US: Bookmarks
+    human_description:
+      en_US: Add a top-level bookmark for each merged file.
+    llm_description: Add a bookmark per file, named after the file name or the PDF title.
+    options:
+      - value: disabled
+        label:
+          en_US: None
+      - value: filename
+        label:
+          en_US: File name
+      - value: title
+        label:
+          en_US: PDF title
+  - name: extra_parameters
+    type: string
+    required: false
+    form: form
+    label:
+      en_US: Extra parameters (JSON)
+    human_description:
+      en_US: 'Optional ConvertAPI parameters as a JSON object, for example {"PageRange": "1-3"}. See the converter page on convertapi.com for the full list.'
+    llm_description: Optional JSON object of extra ConvertAPI conversion parameters.
+extra:
+  python:
+    source: tools/merge_pdf.py

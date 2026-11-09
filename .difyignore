@@ -1,0 +1,21 @@
+# Keep the package to runtime files plus README and privacy policy.
+.git/
+.github/
+.gitignore
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+.env
+.env.*
+*.difypkg
+tests/
+dist/
+scripts/
+PR_DESCRIPTION.md
+pyproject.toml
+pytest.ini
+test-output/

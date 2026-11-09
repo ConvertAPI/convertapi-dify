@@ -1,0 +1,41 @@
+identity:
+  name: office_to_pdf
+  author: convertapi
+  label:
+    en_US: Office / HTML to PDF
+description:
+  human:
+    en_US: Convert Word, Excel, PowerPoint, OpenDocument, RTF, TXT or HTML files to PDF with high layout fidelity.
+  llm: Convert an Office document (doc, docx, xls, xlsx, ppt, pptx, odt, ods, odp, rtf, txt) or an HTML file to PDF.
+parameters:
+  - name: input_file
+    type: file
+    required: true
+    form: llm
+    label:
+      en_US: Document
+    human_description:
+      en_US: Word, Excel, PowerPoint, OpenDocument, RTF, TXT or HTML file.
+    llm_description: The Office, OpenDocument, RTF, TXT or HTML file to convert to PDF.
+  - name: pdfa
+    type: boolean
+    required: false
+    default: false
+    form: form
+    label:
+      en_US: PDF/A output
+    human_description:
+      en_US: Create a PDF/A-compliant file for long-term archiving (Office inputs only).
+    llm_description: Set true to create a PDF/A file for archiving.
+  - name: extra_parameters
+    type: string
+    required: false
+    form: form
+    label:
+      en_US: Extra parameters (JSON)
+    human_description:
+      en_US: 'Optional ConvertAPI parameters as a JSON object, for example {"PageRange": "1-3"}. See the converter page on convertapi.com for the full list.'
+    llm_description: Optional JSON object of extra ConvertAPI conversion parameters.
+extra:
+  python:
+    source: tools/office_to_pdf.py

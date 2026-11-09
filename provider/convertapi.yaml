@@ -1,0 +1,63 @@
+identity:
+  author: convertapi
+  name: convertapi
+  label:
+    en_US: ConvertAPI
+  description:
+    en_US: Convert files between 300+ formats with ConvertAPI. Office and HTML to PDF, PDF to Word and Excel, merge, compress and OCR PDFs.
+  icon: icon.svg
+  tags:
+    - productivity
+    - utilities
+credentials_for_provider:
+  api_token:
+    type: secret-input
+    required: true
+    label:
+      en_US: API Token
+    placeholder:
+      en_US: Paste your ConvertAPI API token
+    help:
+      en_US: Get a token in your ConvertAPI account. Sign-up is free.
+    url: https://www.convertapi.com/a/auth
+  region:
+    type: select
+    required: false
+    default: global
+    label:
+      en_US: Processing region
+    help:
+      en_US: Where ConvertAPI processes your files. Global routes to the nearest data center; pick a region to keep files in it.
+    options:
+      - value: global
+        label:
+          en_US: Global (nearest data center)
+      - value: eu
+        label:
+          en_US: European Union
+      - value: uk
+        label:
+          en_US: United Kingdom
+      - value: us
+        label:
+          en_US: United States
+      - value: ca
+        label:
+          en_US: Canada
+      - value: as
+        label:
+          en_US: Asia
+      - value: au
+        label:
+          en_US: Australia
+tools:
+  - tools/convert_file.yaml
+  - tools/office_to_pdf.yaml
+  - tools/pdf_to_word.yaml
+  - tools/pdf_to_excel.yaml
+  - tools/merge_pdf.yaml
+  - tools/compress_pdf.yaml
+  - tools/ocr_pdf.yaml
+extra:
+  python:
+    source: provider/convertapi.py

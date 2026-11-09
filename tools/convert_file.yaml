@@ -1,0 +1,49 @@
+identity:
+  name: convert_file
+  author: convertapi
+  label:
+    en_US: Convert File
+description:
+  human:
+    en_US: Convert a file to another format, for example DOCX to PDF, PDF to JPG, HTML to DOCX or XLSX to CSV. Supports 300+ format pairs.
+  llm: Convert a file from one format to another with ConvertAPI. Set output_format to the target file extension, such as pdf, docx, xlsx, pptx, jpg, png, txt, html or csv.
+parameters:
+  - name: input_file
+    type: file
+    required: true
+    form: llm
+    label:
+      en_US: Input file
+    human_description:
+      en_US: The file to convert.
+    llm_description: The file to convert.
+  - name: output_format
+    type: string
+    required: true
+    form: llm
+    label:
+      en_US: Output format
+    human_description:
+      en_US: Target format as a file extension, for example pdf, docx, jpg, png, txt or csv.
+    llm_description: Target format as a file extension, for example pdf, docx, xlsx, jpg, png, txt, html or csv.
+  - name: input_format
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Input format
+    human_description:
+      en_US: Source format. Leave empty to use the file's extension.
+    llm_description: Source format as a file extension. Leave empty to use the input file's extension.
+  - name: extra_parameters
+    type: string
+    required: false
+    form: form
+    label:
+      en_US: Extra parameters (JSON)
+    human_description:
+      en_US: 'Optional ConvertAPI parameters as a JSON object, for example {"PageRange": "1-3"}. See the converter page on convertapi.com for the full list.'
+    llm_description: Optional JSON object of extra ConvertAPI conversion parameters.
+extra:
+  python:
+    source: tools/convert_file.py

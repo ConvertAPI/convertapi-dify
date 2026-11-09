@@ -1,0 +1,166 @@
+identity:
+  name: ocr_pdf
+  author: convertapi
+  label:
+    en_US: OCR PDF
+description:
+  human:
+    en_US: Make a scanned PDF searchable by adding a text layer, or extract its text as a TXT file.
+  llm: Run OCR on a scanned PDF. Returns a searchable PDF, or plain text when output_type is txt.
+parameters:
+  - name: input_file
+    type: file
+    required: true
+    form: llm
+    label:
+      en_US: PDF file
+    human_description:
+      en_US: The scanned PDF.
+    llm_description: The scanned PDF file to run OCR on.
+  - name: language
+    type: select
+    required: false
+    default: en
+    form: llm
+    label:
+      en_US: Language
+    human_description:
+      en_US: Language of the text in the document.
+    llm_description: "Language code of the document text: ar, ca, zh-cn, zh-tw, da, nl, en, fi, fa (French), de, el, he, it, ja, ko, lt, no, pl, pt, ro, ru, sl, es, sv, tr, ua, th."
+    options:
+      - value: "ar"
+        label:
+          en_US: Arabic
+      - value: "ca"
+        label:
+          en_US: Catalan
+      - value: "zh-cn"
+        label:
+          en_US: Chinese Simplified
+      - value: "zh-tw"
+        label:
+          en_US: Chinese Traditional
+      - value: "da"
+        label:
+          en_US: Danish
+      - value: "nl"
+        label:
+          en_US: Dutch
+      - value: "en"
+        label:
+          en_US: English
+      - value: "fi"
+        label:
+          en_US: Finnish
+      - value: "fa"
+        label:
+          en_US: French
+      - value: "de"
+        label:
+          en_US: German
+      - value: "el"
+        label:
+          en_US: Greek
+      - value: "he"
+        label:
+          en_US: Hebrew
+      - value: "it"
+        label:
+          en_US: Italian
+      - value: "ja"
+        label:
+          en_US: Japanese
+      - value: "ko"
+        label:
+          en_US: Korean
+      - value: "lt"
+        label:
+          en_US: Lithuanian
+      - value: "no"
+        label:
+          en_US: Norwegian
+      - value: "pl"
+        label:
+          en_US: Polish
+      - value: "pt"
+        label:
+          en_US: Portuguese
+      - value: "ro"
+        label:
+          en_US: Romanian
+      - value: "ru"
+        label:
+          en_US: Russian
+      - value: "sl"
+        label:
+          en_US: Slovenian
+      - value: "es"
+        label:
+          en_US: Spanish
+      - value: "sv"
+        label:
+          en_US: Swedish
+      - value: "th"
+        label:
+          en_US: Thai
+      - value: "tr"
+        label:
+          en_US: Turkish
+      - value: "ua"
+        label:
+          en_US: Ukrainian
+  - name: output_type
+    type: select
+    required: false
+    default: pdf
+    form: llm
+    label:
+      en_US: Output
+    human_description:
+      en_US: Searchable PDF, or the recognized text as a TXT file.
+    llm_description: pdf for a searchable PDF (default), txt for the recognized plain text.
+    options:
+      - value: pdf
+        label:
+          en_US: Searchable PDF
+      - value: txt
+        label:
+          en_US: Text file
+  - name: quality
+    type: select
+    required: false
+    default: fast
+    form: form
+    label:
+      en_US: Recognition quality
+    human_description:
+      en_US: Enhanced reads poor scans, photos, small print and handwriting better, but is slower.
+    llm_description: fast (default) or enhanced for poor scans and handwriting.
+    options:
+      - value: fast
+        label:
+          en_US: Fast
+      - value: enhanced
+        label:
+          en_US: Enhanced
+  - name: page_range
+    type: string
+    required: false
+    form: llm
+    label:
+      en_US: Page range
+    human_description:
+      en_US: Pages to convert, for example 1-10 or 1,2,5. Leave empty for all pages.
+    llm_description: Pages to convert, for example 1-10 or 1,2,5. Leave empty for all pages.
+  - name: extra_parameters
+    type: string
+    required: false
+    form: form
+    label:
+      en_US: Extra parameters (JSON)
+    human_description:
+      en_US: 'Optional ConvertAPI parameters as a JSON object, for example {"PageRange": "1-3"}. See the converter page on convertapi.com for the full list.'
+    llm_description: Optional JSON object of extra ConvertAPI conversion parameters.
+extra:
+  python:
+    source: tools/ocr_pdf.py
