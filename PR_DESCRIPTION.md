@@ -36,7 +36,7 @@ The plugin processes user-uploaded files and sends them to an external service (
 
 - [x] I have read and followed the [Marketplace submission requirements](https://github.com/langgenius/dify-plugins/blob/main/docs/plugin-submission-requirements.md).
 - [x] I have read and comply with the [Plugin Development Guidelines](https://docs.dify.ai/en/develop-plugin/publishing/standards/contributor-covenant-code-of-conduct).
-- [ ] I tested this plugin on Dify Community Edition and Dify Cloud, or documented any limitation below.
+- [x] I tested this plugin on Dify Community Edition and Dify Cloud, or documented any limitation below.
 - [x] The package contains only files needed at runtime.
 - [x] The package does not contain secrets, local credentials, `.env` files, `.git` directories, virtual environments, caches, logs, or IDE files.
 - [x] The package does not contain executables or bundled binaries, or I explained why they are required below.
@@ -56,7 +56,7 @@ The plugin processes user-uploaded files and sends them to an external service (
 
 ```
 $ pytest -v            # plugin loaded with dify_plugin's PluginRegistration, as the runtime does
-22 passed              # 10 offline + 12 live against https://v2.convertapi.com
+23 passed              # 11 offline + 12 live against https://v2.convertapi.com
 
 Live: provider validation (valid, regional and invalid token); DOCX/HTML → PDF and PDF/A;
 PDF → DOCX; CSV → XLSX → PDF → XLSX (table values checked); merge 2 PDFs with bookmarks;
@@ -68,4 +68,11 @@ The package was checked against the rules in langgenius/dify-marketplace-toolkit
 
 ## Reviewer notes
 
-Tested with dify_plugin 0.11.0 through the SDK runtime and live ConvertAPI calls, not yet in a running Dify Community Edition or Dify Cloud instance.
+Tested on Dify Community Edition 1.19.0 (Docker Compose, unsigned local package with `FORCE_VERIFYING_SIGNATURE=false`) against the live ConvertAPI API:
+
+- Installed from the local package; the provider form validates the token, and a wrong token shows "ConvertAPI rejected the token…".
+- One workflow with file Start inputs ran all seven tools on real files: DOCX → PDF (Convert File), DOCX → PDF/A (Office / HTML to PDF), PDF → DOCX with a page range, table PDF → XLSX, merge 2 PDFs, compress (225 KB → 128 KB), OCR to searchable PDF and to TXT. Every output came back as a Dify file and downloaded with the right content type.
+- Error cases (unsupported pair, bad page range, wrong input type, invalid extra-parameters JSON, merge with one file) fail the node with a readable message, so Dify's error handling (fail branch, default value) applies.
+- Self-hosted note: the plugin reads input files from the Dify API, so Docker installs need `INTERNAL_FILES_URL=http://api:5001` (documented in the README).
+
+Not tested: Dify Cloud, and the tools inside an Agent app (no LLM provider was available locally). The plugin was also tested with dify_plugin 0.11.0 through the SDK runtime.
